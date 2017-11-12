@@ -2,6 +2,10 @@
 #include <string>
 #include <libguile.h>
 #include "scm.hpp"
+#include "pack.hpp"
+#include <tuple>
+#include <boost/callable_traits/args.hpp>
+
 
 const std::string hello = "hello";
 
@@ -17,6 +21,12 @@ struct test {
 
 static SCM test_type;
 
+template <typename Fn, typename R, typename T1>
+R yeah(Fn fn, T1 t)
+{return fn(t);}
+
+    
+          
 void init_test_type(void)
 {
     SCM name = scm_from_utf8_symbol("image");
@@ -38,37 +48,24 @@ SCM make_test(SCM s_width, SCM s_height)
     return scm_make_foreign_object_1(test_type, t);
 }
 
-void foo(const double& a) {
-    std::cout << "foo" << std::endl;
-    std::cout << a << std::endl;
+double empty() {
+    return 10.0;
 }
-
-void forbar(std::string a)
-{}
-
-void bar(double a) {
-    std::cout << "bar" << std::endl;
-    std::cout << a << std::endl;
-}
-
 
 static void inner_main(void* data, int argc, char** argv)
 {
     //init_test_type();
     scm_c_define_gsubr("say-hello", 0,0,0, (void**) say_hello);
     scm_c_define_gsubr("make-test", 2,0,0, (void**) make_test);
-    
 
-    geil::val b(10.0);
-    foo(b);
-    bar(b);
-
-    forbar(b);
     scm_shell(argc, argv);
 }
 
 int main(int argc, char* argv[]) {
 
+    
+    std::tuple<void> a;
+    
     
     scm_boot_guile(argc, argv, inner_main, 0);
     return 0;
