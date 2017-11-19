@@ -4,6 +4,7 @@
 #include "scm.hpp"
 #include "pack.hpp"
 #include <tuple>
+#include <type_traits>
 #include <boost/callable_traits/args.hpp>
 
 
@@ -63,9 +64,15 @@ static void inner_main(void* data, int argc, char** argv)
 
 int main(int argc, char* argv[]) {
 
+
     
-    std::tuple<void> a;
-    
+    geil::detail::pack<void> a;
+    geil::detail::pack_last_t<geil::detail::pack<void,int>> b;
+
+    static_assert(
+        std::is_same_v<geil::detail::pack_last_t<geil::detail::pack<void, int>>,
+                       int> == true);
+
     scm_boot_guile(argc, argv, inner_main, 0);
     return 0;
 }

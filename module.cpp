@@ -22,7 +22,7 @@ void init_module()
     geil::detail::define_foreign<test>("test_bla");
     geil::detail::make_foreign<test>();
     geil::detail::make_foreign<test>();
-    geil::detail::define_function("empty-test", empty);
+    //geil::detail::define_function("empty-test", empty);
     //geil::detail::define_function("foobar", foobar);
     
 }
