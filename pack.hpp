@@ -9,6 +9,18 @@ namespace detail {
 
 struct none_t;
 
+template<typename... TS>
+struct pack{};
+
+template <typename Pack>
+struct pack_size;
+
+template <typename... Ts>
+struct pack_size<pack<Ts...>>
+{
+    static constexpr auto value = sizeof...(Ts);
+};
+
 template <typename Pack> struct pack_last { using type = none_t; };
 
 template <typename T, typename... Ts>

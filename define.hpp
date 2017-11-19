@@ -3,6 +3,7 @@
 #include <boost/callable_traits/args.hpp>
 #include <libguile.h>
 #include "value_type.hpp"
+#include "pack.hpp"
 
 
 namespace geil {
@@ -33,7 +34,7 @@ auto define_function_helper(Fn fn, std::tuple<Args...>) {
 
 template <typename Fn>
 static void define_function(const std::string& name, Fn fn) {
-    using args_t = boost::callable_traits::args_t<Fn>;
+    using args_t = boost::callable_traits::args_t<Fn,pack>;
     constexpr auto args_size = std::tuple_size<args_t>::value;
 
     auto subr = (scm_t_subr) +define_function_helper(fn, args_t{});

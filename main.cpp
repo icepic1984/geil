@@ -66,7 +66,6 @@ int main(int argc, char* argv[]) {
     
     std::tuple<void> a;
     
-    
     scm_boot_guile(argc, argv, inner_main, 0);
     return 0;
 }
