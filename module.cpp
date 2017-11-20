@@ -15,6 +15,9 @@ void foobar(double x) {
     std::cout << x << std::endl;
 }
 
+void bar()
+{std::cout << "fuck" <<std::endl;}
+
 extern "C"
 void init_module()
 
@@ -24,5 +27,6 @@ void init_module()
     geil::detail::make_foreign<test>();
     geil::detail::define_function("empty-test", empty);
     geil::detail::define_function("foobar", foobar);
+    geil::detail::define_function("bar", bar);
     
 }

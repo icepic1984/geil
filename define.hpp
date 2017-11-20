@@ -26,6 +26,16 @@ auto define_function_helper_impl(Fn fn, pack<void>, pack<T1>)
     };
 }
 
+template <typename Fn>
+auto define_function_helper_impl(Fn fn, pack<void>, pack<>)
+{
+    static const Fn fn_ = fn;
+    return []() -> SCM {
+        fn_();
+        return SCM_UNSPECIFIED;
+    };
+}
+
 template <typename Fn, typename... Args>
 auto define_function_helper(Fn fn, pack<Args...>) {
     return define_function_helper_impl(
