@@ -41,7 +41,25 @@ template <typename Fn, typename T1>
 auto define_function_helper_impl(Fn fn, pack<void>, pack<T1>) {
     static const Fn fn_ = fn;
     return [](SCM a1) -> SCM {
-        fn_(to_cpp<T1>(a1));
+        std::invoke(fn_, to_cpp<T1>(a1));
+        return SCM_UNSPECIFIED;
+    };
+}
+
+template <typename Fn, typename T1, typename T2>
+auto define_function_helper_impl(Fn fn, pack<void>, pack<T1, T2>) {
+    static const Fn fn_ = fn;
+    return [](SCM a1, SCM a2) -> SCM {
+        std::invoke(fn_, to_cpp<T1>(a1), to_cpp<T2>(a2));
+        return SCM_UNSPECIFIED;
+    };
+}
+
+template <typename Fn, typename T1, typename T2, typename T3>
+auto define_function_helper_impl(Fn fn, pack<void>, pack<T1, T2, T3>) {
+    static const Fn fn_ = fn;
+    return [](SCM a1, SCM a2, SCM a3) -> SCM {
+        std::invoke(fn_, to_cpp<T1>(a1), to_cpp<T2>(a2), to_cpp<T3>(a3));
         return SCM_UNSPECIFIED;
     };
 }
@@ -50,7 +68,7 @@ template <typename Fn>
 auto define_function_helper_impl(Fn fn, pack<void>, pack<>) {
     static const Fn fn_ = fn;
     return []() -> SCM {
-        fn_();
+        std::invoke(fn_);
         return SCM_UNSPECIFIED;
     };
 }

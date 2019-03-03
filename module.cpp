@@ -45,10 +45,10 @@ extern "C" void init_module()
     // geil::detail::define_function("empty-test", empty);
     // geil::detail::define_function("foobar", foobar);
     geil::detail::define_function("get", &test::getHeight);
-    // geil::type<test>("testg")
-    //     .constructor()
-    //     // .define("setWidth", &test::setWidth)
-    //     // .define("setHeight", &test::setHeight)
-    //     .define("getWidth", &test::getWidth)
-    //     .define("getHeight", &test::getHeight);
+    geil::type<test>("testg")
+        .constructor()
+        .define("setWidth", &test::setWidth)
+        .define("setHeight", &test::setHeight)
+        .define("getWidth", &test::getWidth)
+        .define("getHeight", &test::getHeight);
 }
