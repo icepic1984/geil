@@ -31,8 +31,15 @@ struct type_definer : move_sequence {
 
     ~type_definer() {
         if (!moved_from_) {
+            using storage_t = detail::foreign_type_storage<T>;
+            assert(storage_t::data == SCM_UNSPECIFIED);
             auto define_name = "<" + type_name_ + ">";
-            define_foreign<T>(define_name);
+            auto foreign_type = scm_make_foreign_object_type(
+                scm_from_utf8_symbol(define_name.c_str()),
+                scm_list_1(scm_from_utf8_symbol("data")), nullptr);
+            scm_c_define(define_name.c_str(), foreign_type);
+            storage_t::data = foreign_type;
+            scm_c_export(define_name.c_str());
         }
     }
 
