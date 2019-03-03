@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <libguile.h>
+#include <vector>
 #include "scm.hpp"
 #include "pack.hpp"
 #include <tuple>
@@ -15,7 +16,6 @@ static SCM say_hello(void) {
 }
 
 struct test {
-
     int width;
     int height;
 };
@@ -61,18 +61,22 @@ static void inner_main(void* data, int argc, char** argv)
 
     scm_shell(argc, argv);
 }
+void bla(const int& a)
+{std::cout << a << std::endl;}
 
 int main(int argc, char* argv[]) {
-
-
     
-    geil::detail::pack<void> a;
-    geil::detail::pack_last_t<geil::detail::pack<void,int>> b;
+    bla(10);
+    bla(10);
 
-    static_assert(
-        std::is_same_v<geil::detail::pack_last_t<geil::detail::pack<void, int>>,
-                       int> == true);
+    // geil::detail::pack<void> a;
+    // geil::detail::pack_last_t<geil::detail::pack<void,int>> b;
 
-    scm_boot_guile(argc, argv, inner_main, 0);
+    // static_assert(
+    //     std::is_same_v<geil::detail::pack_last_t<geil::detail::pack<void,
+    //     int>>,
+    //                    int> == true);
+
+    // scm_boot_guile(argc, argv, inner_main, 0);
     return 0;
 }

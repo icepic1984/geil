@@ -23,7 +23,7 @@ target_link_libraries(guilecpp ${GUILE_LIBRARIES} call)
 
 add_library(module SHARED module.cpp)
 set_target_properties(module PROPERTIES
-        CXX_STANDARD 14
+        CXX_STANDARD 17
         CXX_STANDARD_REQUIRED YES
 )
 target_include_directories(module PRIVATE ${GUILE_INCLUDE_DIRS})

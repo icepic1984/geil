@@ -1,17 +1,25 @@
 #ifndef VALUE_TYPE_HPP_
 #define VALUE_TYPE_HPP_
 
+#include <cstdint>
 #include <libguile.h>
 #include <type_traits>
 #include <utility>
-#include <cstdint>
 
 namespace geil {
 
 namespace detail {
 
-template <typename T>
-struct convert;
+template <typename T, typename Enable = void> struct convert;
+
+template <typename T> struct convert_wrapper_type {
+    static T to_cpp(SCM v) {
+        return T{v};
+    }
+    static SCM to_scm(T v) {
+        return v.get();
+    }
+};
 
 #define SCM_DECLTYPE_RETURN(...)                                               \
     decltype(__VA_ARGS__) {                                                    \
@@ -43,8 +51,7 @@ auto to_scm(T&& v) -> SCM_DECLTYPE_RETURN(
     convert<std::decay_t<T>>::to_scm(std::forward<T>(v)));
 
 template <typename T>
-auto to_cpp(SCM v) -> SCM_DECLTYPE_RETURN(
-    convert<std::decay_t<T>>::to_cpp(v));
+auto to_cpp(SCM v) -> SCM_DECLTYPE_RETURN(convert<std::decay_t<T>>::to_cpp(v));
 
 struct wrapper {
 
@@ -64,7 +71,7 @@ struct wrapper {
     bool operator==(wrapper other) {
         return m_handle == other.m_handle;
     }
-   
+
     bool operator!=(wrapper other) {
         return m_handle != other.m_handle;
     }
@@ -74,8 +81,7 @@ struct wrapper {
 
 } // End of namespace detail
 
-struct val : detail::wrapper
-{
+struct val : detail::wrapper {
     using base_t = detail::wrapper;
 
     using base_t::base_t;
@@ -93,5 +99,10 @@ struct val : detail::wrapper
     }
 };
 
-} // End of namespace geil
+namespace detail {
+template <> struct convert<geil::val> : convert_wrapper_type<geil::val> {};
+} // namespace detail
+
+} // namespace geil
+
 #endif // VALUE_TYPE__HPP_
